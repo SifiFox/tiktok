@@ -29,31 +29,29 @@ const VideoCard: NextPage<IProps> = ({ post }: IProps) => {
     }
   };
 
-  const on = () => {
-    if (playing) {
-      videoRef?.current?.pause();
-      setPlaying(false);
-    } else {
-      videoRef?.current?.play();
-      setPlaying(true);
+  useEffect(() => {
+    if (post && videoRef?.current) {
+      videoRef.current.muted = isVideoMuted;
     }
-  };
+  }, [post, isVideoMuted]);
 
   return (
     <div className="flex flex-col border-b-2 border-gray-200 pb-6">
       <div>
         <div className="flex gap-3 p-2 cursor-pointer font-semibold rounded">
           <div className="md:w-16 md:h-16 w-10 h-10">
-            <Link href="/">
-              <Image
-                width={62}
-                height={62}
-                className="rounded-full"
-                src={`${post.postedBy.image}`}
-                alt="profile"
-                layout="responsive"
-              />
-            </Link>
+            {post.postedBy && (
+              <Link href="/">
+                <Image
+                  width={62}
+                  height={62}
+                  className="rounded-full"
+                  src={post.postedBy.image}
+                  alt="profile"
+                  layout="responsive"
+                />
+              </Link>
+            )}
           </div>
           <div>
             <Link href="/">
@@ -81,12 +79,12 @@ const VideoCard: NextPage<IProps> = ({ post }: IProps) => {
           }}
           className="rounded-3xl relative"
         >
-          <Link href="/">
+          <Link href={`/detail/${post._id}`}>
             <video
               ref={videoRef}
               src={post.video.asset.url}
               loop
-              className="lg:w[600px] h-[300px] md:h-[400px] lg:h-[530px] w-[200px] rounded-2xl cursor-pointer bg-gray-100"
+              className="lg:w-[600px] h-[300px] md:h-[400px] lg:h-[530px] w-[200px] rounded-2xl cursor-pointer bg-gray-100"
             ></video>
           </Link>
 
